@@ -1,6 +1,8 @@
 # Red Iron Engine
 
-<img alt="RIEngine-Logo.png" height="300" src="Doc/RIEngine-Logo.png" width="700"/>
+<div align="center">
+<img alt="RIEngine-Logo.png"  src="Doc/RIEngine-Logo.png" width="700"/>
+</div>
 
 ## Inspired by Unity, a fully C# 3D Engine
 Most 3d engines are written in C++ in order to get best performance,
