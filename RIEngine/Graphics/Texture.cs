@@ -1,7 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
 using StbImageSharp;
 
-namespace RIEngine.Core.Graphics;
+namespace RIEngine.Graphics;
 
 public class Texture
 {

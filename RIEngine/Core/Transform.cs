@@ -6,15 +6,14 @@ namespace RIEngine.Core;
 
 public class Transform : Component
 {
-    [JsonIgnore] 
-    public Transform? Parent;
+    [JsonIgnore] public Transform? Parent;
     public List<Transform> Children = new List<Transform>();
-    
+    [JsonIgnore] private bool _isChanged = false;  
     #region Position
 
     private Vector3 _position = Vector3.Zero;
     private Vector3 _localPosition = Vector3.Zero;
-    
+
     /// <summary>
     /// World position.
     /// Setting this property will also set the local position.
@@ -29,6 +28,7 @@ public class Transform : Component
                 Parent?.TranslatePoint(value) ?? value;
         }
     }
+
     /// <summary>
     /// Local position.
     /// Setting this property will also set the world position.
@@ -113,6 +113,8 @@ public class Transform : Component
 
     #endregion
 
+    #region Axis
+
     [JsonIgnore]
     public Vector3 Up
     {
@@ -127,23 +129,21 @@ public class Transform : Component
         set => Rotation = ExQuaternion.FromToRotation(Right, value);
     }
 
-    #region Space Transform Matrix
-
-    [JsonIgnore]
-    public Matrix4 LocalToWorldMatrix =>
-        Matrix4.CreateTranslation(Position) *
-        (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateScale(Scale));
-
-    [JsonIgnore] public Matrix4 WorldToLocalMatrix => LocalToWorldMatrix.Inverted();
-
-    #endregion
-    
     [JsonIgnore]
     public Vector3 Forward
     {
         get => Rotation * Vector3.UnitZ;
         set => Rotation = ExQuaternion.LookRotation(value, Vector3.UnitY);
     }
+
+    #endregion
+
+    #region Space Transform Matrix
+
+    [JsonIgnore] public Matrix4 LocalToWorldMatrix;
+
+    [JsonIgnore] public Matrix4 WorldToLocalMatrix => LocalToWorldMatrix.Inverted();
+
 
     private Vector3 WorldToLocalTranslate(Vector4 vec)
     {
@@ -175,24 +175,38 @@ public class Transform : Component
         return LocalToWorldTranslate(new Vector4(vector, 0));
     }
 
+    #endregion
+
+
     #region Constructor
 
     private Transform(RIObject riObject) : base(riObject)
     {
+        LocalToWorldMatrix = Matrix4.CreateTranslation(Position) *
+                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateScale(Scale));
     }
 
     #endregion
 
     #region Callbacks
 
-    public override void OnUpdateFrame()
+    public void UpdateTransform()
     {
-        if (Parent == null)
+        if (Parent == null && !_isChanged)
             return;
 
         LocalScale = LocalScale;
         LocalRotation = LocalRotation;
         LocalPosition = LocalPosition;
+        
+        LocalToWorldMatrix = Matrix4.CreateTranslation(Position) *
+            (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateScale(Scale));
+        _isChanged = false;
+        
+        foreach (var child in Children)
+        {
+            child._isChanged = true;
+        }
     }
 
     #endregion

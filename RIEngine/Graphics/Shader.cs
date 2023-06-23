@@ -1,7 +1,7 @@
 using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 
-namespace RIEngine.Core.Graphics
+namespace RIEngine.Graphics
 {
     public sealed class Shader : IDisposable
     {

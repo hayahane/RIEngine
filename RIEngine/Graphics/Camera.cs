@@ -1,7 +1,8 @@
 using System.Text.Json.Serialization;
 using OpenTK.Mathematics;
+using RIEngine.Core;
 
-namespace RIEngine.Core.Graphics;
+namespace RIEngine.Graphics;
 
 public enum CastMode
 {
@@ -22,10 +23,9 @@ public class Camera : Behaviour
     private Camera(RIObject riObject) : base(riObject)
     { }
 
-    public override void OnUpdateFrame()
+    public void Update()
     {
-        base.OnUpdateFrame();
         ViewMatrix = Matrix4.LookAt(RIObject.Transform.Position, RIObject.Transform.Position - RIObject.Transform.Forward, RIObject.Transform.Up);
-        //ProjectionMatrix =  Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, RenderView.Resolution.X/ RenderView.Resolution.Y, 0.1f, 1000f);
+        //ProjectionMatrix =  Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver2, RIView.Resolution.X/ RIView.Resolution.Y, 0.1f, 1000f);
     }
 }

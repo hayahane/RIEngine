@@ -4,7 +4,7 @@ using OpenTK.Mathematics;
 
 using RIEngine.Core;
 
-namespace RIRenderer.Serialization;
+namespace RIEngine.Utility.Serialization;
 
 public class OpenTkVector3Converter : JsonConverter
 {
@@ -76,7 +76,7 @@ public class QuaternionConverter : JsonConverter
     }
 }
 
-public class RenderObjectConverter : JsonConverter
+public class ComponentConverter : JsonConverter
 {
     public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
@@ -132,6 +132,6 @@ public class RenderObjectConverter : JsonConverter
 
     public override bool CanConvert(Type objectType)
     {
-        return (objectType.IsSubclassOf(typeof(RIObject)) || objectType == typeof(RIObject));
+        return (objectType.IsSubclassOf(typeof(Component)) || objectType == typeof(Component));
     }
 }

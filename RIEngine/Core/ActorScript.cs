@@ -19,6 +19,8 @@ namespace RIEngine.Core;
 public class ActorScript : Behaviour
 {
     private ActorScript(RIObject riObject) : base(riObject)
-    {
-    }
+    { }
+    
+    public virtual void OnFixedUpdate(){}
+    public virtual void OnRenderFinished(){}
 }

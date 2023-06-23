@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
 using OpenTK.Graphics.OpenGL4;
+using RIEngine.Core;
 
-namespace RIEngine.Core.Graphics;
+namespace RIEngine.Graphics;
 
 public class MeshRenderer : Behaviour
 {
     [JsonIgnore] public Mesh Mesh { get; set; }
-    private float[] _vertexBuffer = Array.Empty<float>();
 
     [JsonIgnore] public Shader Shader { get; set; }
     [JsonIgnore] public Texture Texture { get; set; }
@@ -35,12 +35,12 @@ public class MeshRenderer : Behaviour
     }
 
 
-    public void WriteMeshToGPU()
+    public void WriteMeshToBuffer()
     {
         // Generate Vertex Buffer Object
         _vertexBufferObject = GL.GenBuffer();
         GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-        GL.BufferData(BufferTarget.ArrayBuffer, Mesh.Vertices.Length * Mesh.BufferStride * sizeof(float),
+        GL.BufferData(BufferTarget.ArrayBuffer, Mesh.VertexBuffer.Length * Mesh.BufferStride * sizeof(float),
             Mesh.VertexBuffer,
             BufferUsageHint.DynamicDraw);
 
@@ -48,13 +48,13 @@ public class MeshRenderer : Behaviour
         _vertexArrayObject = GL.GenVertexArray();
         GL.BindVertexArray(_vertexArrayObject);
         // Vertex Positions
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 23 * sizeof(float), 0);
+        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 0);
         GL.EnableVertexAttribArray(0);
-        // Vertex Colors
-        GL.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 23 * sizeof(float), 3 * sizeof(float));
+        // Vertex Normals
+        GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 8 * sizeof(float), 3 * sizeof(float));
         GL.EnableVertexAttribArray(1);
         // Vertex UVs
-        GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 23 * sizeof(float), 13 * sizeof(float));
+        GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, 8 * sizeof(float), 6 * sizeof(float));
         GL.EnableVertexAttribArray(2);
 
         // Generate Element Buffer Object
@@ -66,33 +66,27 @@ public class MeshRenderer : Behaviour
 
     public override void OnSpawn()
     {
-        base.OnSpawn();
-
         Initialize();
 
-        WriteMeshToGPU();
+        WriteMeshToBuffer();
     }
-
-    public override void OnUpdateFrame()
-    {
-        base.OnUpdateFrame();
-    }
-
-    public void OnRenderFrame()
+    
+    public void Render2View(RIView riView)
     {
         GL.BindVertexArray(_vertexArrayObject);
 
         Shader.SetMat4("model", RIObject.Transform.LocalToWorldMatrix);
-        //Shader.SetMat4("view", RIEngine.Core.RenderView.ActiveCamera.ViewMatrix);
-        //Shader.SetMat4("projection", RIEngine.Core.RenderView.ActiveCamera.ProjectionMatrix);
+        Shader.SetMat4("view", riView.ActiveCamera.ViewMatrix);
+        Shader.SetMat4("projection", riView.ActiveCamera.ProjectionMatrix);
         Shader.Use();
         Texture.Use(TextureUnit.Texture0);
 
         GL.DrawElements(PrimitiveType.Triangles, Mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
     }
+    
 
     public override void OnDestroy()
     {
-        Shader?.Dispose();
+        Shader.Dispose();
     }
 }

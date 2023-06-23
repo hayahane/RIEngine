@@ -8,6 +8,4 @@ public abstract class Component
     {
         RIObject = riObject;
     }
-    
-    public virtual void OnUpdateFrame(){}
 }

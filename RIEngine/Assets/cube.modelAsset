@@ -1,0 +1,282 @@
+{
+  "VertexBuffer": [
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": 1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.875,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": 1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": 1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": 1.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": 1.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 1.0
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": 1.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": -1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.0
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": -1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.25
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": -1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.0
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.125,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.125,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": 1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": 1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": 1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": -1.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.25
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": -1.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.5
+    },
+    {
+      "PosX": -1.0,
+      "PosY": -1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": -1.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.25
+    },
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": 1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.875,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": 1.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 1.0
+    },
+    {
+      "PosX": -1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": -1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.25
+    },
+    {
+      "PosX": 1.0,
+      "PosY": -1.0,
+      "PosZ": 1.0,
+      "NormalX": -0.0,
+      "NormalY": -1.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.375,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": 1.0,
+      "NormalX": 1.0,
+      "NormalY": -0.0,
+      "NormalZ": -0.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.75
+    },
+    {
+      "PosX": 1.0,
+      "PosY": 1.0,
+      "PosZ": -1.0,
+      "NormalX": -0.0,
+      "NormalY": -0.0,
+      "NormalZ": -1.0,
+      "TexCoordX": 0.625,
+      "TexCoordY": 0.5
+    }
+  ],
+  "Indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    0,
+    18,
+    1,
+    3,
+    19,
+    4,
+    6,
+    20,
+    7,
+    9,
+    21,
+    10,
+    12,
+    22,
+    13,
+    15,
+    23,
+    16
+  ]
+}
