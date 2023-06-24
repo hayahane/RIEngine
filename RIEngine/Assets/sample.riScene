@@ -1,0 +1,182 @@
+[
+  {
+    "$id": "1",
+    "Name": "camera",
+    "Tag": "Default",
+    "IsActive": true,
+    "Transform": {
+      "$type": "RIEngine.Core.Transform",
+      "Children": [],
+      "Position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "LocalPosition": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "Rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "LocalRotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "Scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "LocalScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "RIObject": {
+        "$ref": "1"
+      }
+    },
+    "Components": [
+      {
+        "$type": "RIEngine.Graphics.Camera",
+        "CastMode": 0,
+        "Near": 0.1,
+        "Far": 1000.0,
+        "FieldOfView": 60.0,
+        "Size": 5.0,
+        "IsEnabled": true,
+        "RIObject": {
+          "$ref": "1"
+        }
+      },
+      {
+        "$type": "RIEngine.BasicComponents.Movement.CharacterMove",
+        "IsEnabled": true,
+        "RIObject": {
+          "$ref": "1"
+        }
+      }
+    ]
+  },
+  {
+    "$id": "2",
+    "Name": "monkeyHead",
+    "Tag": "Default",
+    "IsActive": true,
+    "Transform": {
+      "$type": "RIEngine.Core.Transform",
+      "Children": [
+        {
+          "$type": "RIEngine.Core.Transform",
+          "Children": [],
+          "Position": [
+            -2.0,
+            0.0,
+            -7.0
+          ],
+          "LocalPosition": [
+            -2.0,
+            0.0,
+            -7.0
+          ],
+          "Rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "LocalRotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "Scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "LocalScale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "RIObject": {
+            "$id": "3",
+            "Name": "cube",
+            "Tag": "Default",
+            "IsActive": true,
+            "Components": [
+              {
+                "$type": "RIEngine.Graphics.MeshRenderer",
+                "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\cube.modelAsset",
+                "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
+                "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
+                "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\Otto.jpeg",
+                "IsEnabled": true,
+                "RIObject": {
+                  "$ref": "3"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "Position": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "LocalPosition": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "Rotation": [
+        0.0,
+        0.38268346,
+        0.0,
+        0.9238795
+      ],
+      "LocalRotation": [
+        0.0,
+        0.38268346,
+        0.0,
+        0.9238795
+      ],
+      "Scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "LocalScale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "RIObject": {
+        "$ref": "2"
+      }
+    },
+    "Components": [
+      {
+        "$type": "RIEngine.Graphics.MeshRenderer",
+        "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\monkeyHead.modelAsset",
+        "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
+        "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
+        "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\OIP.jpg",
+        "IsEnabled": true,
+        "RIObject": {
+          "$ref": "2"
+        }
+      }
+    ]
+  }
+]

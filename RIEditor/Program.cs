@@ -21,9 +21,12 @@ class Program
             .LogToTrace()
             .UseReactiveUI();*/
 
-    public static void Main(string[] args)
+    /*public static void Main(string[] args)
     {
         ObjFileImporter.ImportObjFile(@"E:\Monologist\CsProjects\RIEngine\Resources\RIEngine\cube.obj",
             @"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\cube.modelAsset");
-    }
+        ObjFileImporter.ImportObjFile(@"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\Models\MonkeyHead.obj",
+            @"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\monkeyHead.modelAsset");
+        
+    }*/
 }

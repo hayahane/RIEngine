@@ -8,7 +8,7 @@ public class RIView
 {
     public Camera ActiveCamera { get; set; } = null!;
     public Vector2i Resolution { get; set; }
-
+    public Color4 BackgroundColor { get; set; } = new Color4(0.05f, 0.50f, 0.50f, 1f);
 
     public RIView()
     {
@@ -35,28 +35,21 @@ public class RIView
 
     public void UpdateActiveCamera()
     {
-        ActiveCamera = GetActiveCamera();
+        var tmpActiveCamera = RIWorld.Instance.FindComponent<Camera>();
+        if (tmpActiveCamera != null) ActiveCamera = tmpActiveCamera;
+    }
+
+    public void PreRender()
+    {
+        GL.ClearColor(BackgroundColor);
+        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
     }
 
     public void Initialize()
     {
         GL.Viewport(0, 0, Resolution.X, Resolution.Y);
+        GL.ClearColor(BackgroundColor);
+        GL.Enable(EnableCap.DepthTest);
         ActiveCamera = GetActiveCamera();
-    }
-    
-    /// <summary>
-    /// Find every MeshRenderer and render them.
-    /// Setting a unique camera space matrix to get the correct view.
-    /// </summary>
-    public void Render()
-    {
-        foreach (var riObject in RIWorld.Instance.RIObjects)
-        {
-            if (!riObject.IsActive) continue;
-            MeshRenderer? mr = riObject.GetComponent<MeshRenderer>();
-            if (mr == null || !mr.IsEnabled) continue;
-            
-            mr.Render2View(this);
-        }
     }
 }

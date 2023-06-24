@@ -7,8 +7,8 @@ namespace RIEngine.Core;
 public class Transform : Component
 {
     [JsonIgnore] public Transform? Parent;
-    public List<Transform> Children = new List<Transform>();
-    [JsonIgnore] private bool _isChanged = false;  
+    public List<Transform> Children { get; set; } = new List<Transform>();
+    [JsonIgnore] private bool _isChanged;
     #region Position
 
     private Vector3 _position = Vector3.Zero;
@@ -23,6 +23,7 @@ public class Transform : Component
         get => _position;
         set
         {
+            _isChanged = true;
             _position = value;
             _localPosition =
                 Parent?.TranslatePoint(value) ?? value;
@@ -38,6 +39,7 @@ public class Transform : Component
         get => _localPosition;
         set
         {
+            _isChanged = true;
             _localPosition = value;
             _position = Parent?.ReversePoint(value) ?? value;
         }
@@ -55,6 +57,7 @@ public class Transform : Component
         get => _rotation;
         set
         {
+            _isChanged = true;
             _rotation = value.Normalized();
             if (Parent != null)
                 _localRotation = Parent.Rotation.Inverted() * _rotation;
@@ -68,6 +71,7 @@ public class Transform : Component
         get => _localRotation;
         set
         {
+            _isChanged = true;
             _localRotation = value.Normalized();
             if (Parent != null)
                 _rotation = _localRotation * Parent.Rotation;
@@ -88,6 +92,7 @@ public class Transform : Component
         get => _scale;
         set
         {
+            _isChanged = true;
             _scale = value;
             if (Parent != null)
                 _localScale = new Vector3(_scale.X / Parent.Scale.X, _scale.Y / Parent.Scale.Y,
@@ -102,6 +107,7 @@ public class Transform : Component
         get => _localScale;
         set
         {
+            _isChanged = true;
             _localScale = value;
             if (Parent != null)
                 _scale = new Vector3(_localScale.X * Parent.Scale.X, _localScale.Y * Parent.Scale.Y,
@@ -180,10 +186,10 @@ public class Transform : Component
 
     #region Constructor
 
-    private Transform(RIObject riObject) : base(riObject)
+    public Transform(RIObject riObject) : base(riObject)
     {
-        LocalToWorldMatrix = Matrix4.CreateTranslation(Position) *
-                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateScale(Scale));
+        LocalToWorldMatrix =  Matrix4.CreateScale(Scale) *
+                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
     }
 
     #endregion
@@ -192,17 +198,16 @@ public class Transform : Component
 
     public void UpdateTransform()
     {
-        if (Parent == null && !_isChanged)
-            return;
-
-        LocalScale = LocalScale;
-        LocalRotation = LocalRotation;
+        if (!_isChanged) return;
+        
+        LocalScale = LocalScale; 
+        LocalRotation = LocalRotation; 
         LocalPosition = LocalPosition;
         
-        LocalToWorldMatrix = Matrix4.CreateTranslation(Position) *
-            (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateScale(Scale));
+        LocalToWorldMatrix =  Matrix4.CreateScale(Scale) *
+                              (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
         _isChanged = false;
-        
+
         foreach (var child in Children)
         {
             child._isChanged = true;

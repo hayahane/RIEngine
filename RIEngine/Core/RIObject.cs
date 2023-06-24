@@ -2,24 +2,20 @@ namespace RIEngine.Core;
 
 public class RIObject
 {
-    public String Name { get; set; } = "RIObject";
+    public String Name { get; set; }
     public string Tag { get; protected set; } = "Default";
     public bool IsActive { get; set; } = true;
     public Transform Transform { get; }
 
     public List<Component> Components { get; set; } = new List<Component>();
+    
 
-
-    private RIObject()
-    {
-        Transform = (Activator.CreateInstance(typeof(Transform), this) as Transform)!;
-    }
-
-    private RIObject(string name, RIObject? parent)
+    public RIObject(string name, RIObject? parent)
     {
         Name = name;
         Transform = (Activator.CreateInstance(typeof(Transform), this) as Transform)!;
         Transform.Parent = parent?.Transform;
+        parent?.Transform.Children.Add(this.Transform);
     }
 
     #region APIs
@@ -32,9 +28,23 @@ public class RIObject
     /// <returns>The Generated RIObject.</returns>
     public static RIObject Spawn()
     {
-        var obj = new RIObject();
+        var obj = new RIObject("RIObject",null);
         RIWorld.Instance.RIObjects.Add(obj);
+        RIWorld.Instance.OnSpawnRIObject(obj);
         return obj;
+    }
+    
+    /// <summary>
+    ///  Spawn a riObject with a RIObject instance.
+    /// </summary>
+    /// <param name="riObject"></param>
+    public static void Spawn(RIObject riObject)
+    {
+        if (riObject.Transform.Parent == null)
+            RIWorld.Instance.RIObjects.Add(riObject);
+        else
+            riObject.Transform.Parent.Children.Add(riObject.Transform);
+        RIWorld.Instance.OnSpawnRIObject(riObject);
     }
 
     /// <summary>
@@ -64,7 +74,6 @@ public class RIObject
     public T AddComponent<T>() where T : Behaviour
     {
         T component = (Activator.CreateInstance(typeof(T), this) as T)!;
-        Components.Add(component);
         return component;
     }
 
@@ -74,7 +83,9 @@ public class RIObject
     /// <typeparam name="T">Type of the component.</typeparam>
     public void RemoveComponent<T>() where T : Behaviour
     {
-        Components.Remove(GetComponent<T>()!);
+        var component = GetComponent<T>();
+        if (component == null) return;
+        Components.Remove(component);
     }
 
     /// <summary>

@@ -18,7 +18,7 @@ namespace RIEngine.Core;
 /// </summary>
 public class ActorScript : Behaviour
 {
-    private ActorScript(RIObject riObject) : base(riObject)
+    protected ActorScript(RIObject riObject) : base(riObject)
     { }
     
     public virtual void OnFixedUpdate(){}

@@ -22,7 +22,7 @@ public static class ObjFileImporter
 
         foreach (var line in lines)
         {
-            int headEnd = line.IndexOf(" ");
+            int headEnd = line.IndexOf(" ", StringComparison.Ordinal);
             string head = line.Substring(0, headEnd);
             string subLine = line.Substring(headEnd + 1);
             switch (head)

@@ -64,13 +64,15 @@ public class MeshRenderer : Behaviour
             BufferUsageHint.StaticDraw);
     }
 
+
+    #region Callbacks
+
     public override void OnSpawn()
     {
         Initialize();
-
         WriteMeshToBuffer();
     }
-    
+
     public void Render2View(RIView riView)
     {
         GL.BindVertexArray(_vertexArrayObject);
@@ -84,9 +86,11 @@ public class MeshRenderer : Behaviour
         GL.DrawElements(PrimitiveType.Triangles, Mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
     }
     
-
     public override void OnDestroy()
     {
         Shader.Dispose();
     }
+
+    #endregion
+
 }
