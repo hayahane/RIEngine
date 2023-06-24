@@ -19,7 +19,13 @@ public class MeshRenderer : Behaviour
     private int _vertexBufferObject;
     private int _vertexArrayObject;
     private int _elementBufferObject;
-
+    
+    public MeshRenderer(RIObject riObject, Guid guid) : base(riObject, guid)
+    {
+        Mesh = null!;
+        Shader = null!;
+        Texture = null!;
+    }
     public MeshRenderer(RIObject riObject) : base(riObject)
     {
         Mesh = null!;
@@ -35,7 +41,7 @@ public class MeshRenderer : Behaviour
     }
 
 
-    public void WriteMeshToBuffer()
+    private void WriteMeshToBuffer()
     {
         // Generate Vertex Buffer Object
         _vertexBufferObject = GL.GenBuffer();

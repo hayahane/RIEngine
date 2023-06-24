@@ -16,9 +16,12 @@ namespace RIEngine.Core;
 /// - OnDisable() called when the RIObject is disabled.
 /// - OnDestroy() called when the RIObject is destroyed.
 /// </summary>
-public class ActorScript : Behaviour
+public abstract class ActorScript : Behaviour
 {
     protected ActorScript(RIObject riObject) : base(riObject)
+    { }
+    
+    protected ActorScript(RIObject riObject, Guid guid) : base(riObject, guid)
     { }
     
     public virtual void OnFixedUpdate(){}

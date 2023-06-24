@@ -1,6 +1,7 @@
 using RIEngine.Patterns;
 using Newtonsoft.Json;
 using RIEngine.Graphics;
+using RIEngine.Utility.Serialization;
 
 namespace RIEngine.Core;
 
@@ -9,7 +10,7 @@ public class RIWorld : Singleton<RIWorld>
     public RIView RIView { get; set; } = new RIView();
 
     [JsonIgnore] public GameTime GameTime { get; } = new GameTime();
-    public List<RIObject> RIObjects { get; set; } = new List<RIObject>();
+    public RIObject WorldRoot { get; set; } = new RIObject("Root", null);
 
     /// <summary>
     /// Read .riScene file and load scene.
@@ -19,15 +20,31 @@ public class RIWorld : Singleton<RIWorld>
     /// <exception cref="Exception">Failed to load scene. The file may be damaged.</exception>
     public void LoadScene(string path, string fileName)
     {
-        string jsonData = File.ReadAllText(path +@"\" + fileName);
-        List<RIObject> newObjects = JsonConvert.DeserializeObject<List<RIObject>>(jsonData)
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            NullValueHandling = NullValueHandling.Ignore,
+
+            //Converters
+            Converters =
+            {
+                new OpenTkVector3Serializer(), 
+                new OpenTkQuaternionSerializer(),
+                new ComponentSerializer(), new OpenTkVector2iSerializer(),
+                new RIObjectSerializer()
+            }
+        };
+        string jsonData = File.ReadAllText(path + @"\" + fileName);
+        WorldRoot = JsonConvert.DeserializeObject<RIObject>(jsonData)
                                     ?? throw new Exception("Failed to load scene. The file may be damaged.");
-        RIObjects = RIObjects.Concat(newObjects).ToList();
+
+        OnSpawnRIObject(WorldRoot);
 
         RIView.UpdateActiveCamera();
     }
-    
-    
+
+
     /// <summary>
     /// Add scene to current RIWorld.
     /// </summary>
@@ -36,10 +53,12 @@ public class RIWorld : Singleton<RIWorld>
     public void AddScene(string path, string fileName)
     {
         string jsonData = File.ReadAllText(path + fileName);
-        List<RIObject> newObjects = JsonConvert.DeserializeObject<List<RIObject>>(jsonData)
+        
+        RIObject newObjects = JsonConvert.DeserializeObject<RIObject>(jsonData)
                                     ?? throw new Exception("Failed to load scene. The file may be damaged.");
-        OnSpawnRIObjects(newObjects);
-        RIObjects = RIObjects.Concat(newObjects).ToList();
+        WorldRoot.Children.Add(newObjects);
+        newObjects.Parent = WorldRoot;
+        OnSpawnRIObject(newObjects);
 
         RIView.UpdateActiveCamera();
     }
@@ -47,22 +66,23 @@ public class RIWorld : Singleton<RIWorld>
     public void Initialize()
     {
         RIView.Initialize();
-        OnSpawnRIObjects(RIObjects);
+        OnSpawnRIObject(WorldRoot);
     }
 
     #region OnSpawn and OnDestroy
 
-        public void OnSpawnRIObject(RIObject riObject)
+    public void OnSpawnRIObject(RIObject riObject)
     {
-        TraversalRIObjects(riObject, obj =>
+        TraversalRIObjects(riObject, ro =>
             {
-                foreach (var component in obj.Components)
+                foreach (var component in ro.Components)
                 {
                     if (component is Behaviour behaviour)
                         behaviour.OnSpawn();
                 }
             },
             false);
+
 
         TraversalRIObjects(riObject, obj =>
         {
@@ -95,70 +115,6 @@ public class RIWorld : Singleton<RIWorld>
             false);
     }
 
-
-    /// <summary>
-    /// Called when the game starts or Load new scenes.
-    /// </summary>
-    private void OnSpawnRIObjects(List<RIObject> objects)
-    {
-        foreach (var riObject in objects)
-        {
-            TraversalRIObjects(riObject, obj =>
-                {
-                    foreach (var component in obj.Components)
-                    {
-                        if (component is Behaviour behaviour)
-                            behaviour.OnSpawn();
-                    }
-                },
-                false);
-        }
-
-        foreach (var riObject in objects)
-        {
-            TraversalRIObjects(riObject, obj =>
-            {
-                foreach (var component in obj.Components)
-                {
-                    if (component is Behaviour behaviour)
-                        behaviour.OnEnable();
-                }
-            });
-        }
-    }
-
-    /// <summary>
-    /// Called when the game ends or change scenes.
-    /// </summary>
-    private void OnDestroyRIObjects()
-    {
-        foreach (var riObject in RIObjects)
-        {
-            TraversalRIObjects(riObject, obj =>
-            {
-                foreach (var component in obj.Components)
-                {
-                    if (component is Behaviour behaviour)
-                        behaviour.OnDisable();
-                }
-            });
-        }
-
-        foreach (var riObject in RIObjects)
-        {
-            TraversalRIObjects(riObject, obj =>
-                {
-                    foreach (var component in obj.Components)
-                    {
-                        if (component is Behaviour behaviour)
-                            behaviour.OnDestroy();
-                    }
-                }
-                , false);
-        }
-    }
-
-
     #endregion
 
     /// <summary>
@@ -172,9 +128,9 @@ public class RIWorld : Singleton<RIWorld>
         if (!riObject.IsActive && activeCompareOn) return;
 
         action(riObject);
-        foreach (var child in riObject.Transform.Children)
+        foreach (var child in riObject.Children)
         {
-            TraversalRIObjects(child.RIObject, action);
+            TraversalRIObjects(child, action);
         }
     }
 
@@ -182,19 +138,16 @@ public class RIWorld : Singleton<RIWorld>
     {
         riView.PreRender();
         riView.ActiveCamera.Update(riView);
-
-        foreach (var riObject in RIObjects)
+        
+        TraversalRIObjects(WorldRoot, obj =>
         {
-            TraversalRIObjects(riObject, obj =>
-            {
-                MeshRenderer? meshRenderer = obj.GetComponent<MeshRenderer>();
-                if (meshRenderer is not { IsEnabled: true }) return;
+            MeshRenderer? meshRenderer = obj.GetComponent<MeshRenderer>();
+            if (meshRenderer is not { IsEnabled: true }) return;
 
-                meshRenderer.Render2View(riView);
-            });
-        }
+            meshRenderer.Render2View(riView);
+        });
     }
-    
+
     /// <summary>
     /// Call ActorScript methods by order to update the world objects.
     /// </summary>
@@ -203,26 +156,23 @@ public class RIWorld : Singleton<RIWorld>
         GameTime.UpdateTime();
 
         // Update Transform 
-        foreach (var riObject in RIObjects)
+        TraversalRIObjects(WorldRoot, obj =>
         {
-            TraversalRIObjects(riObject, obj => { obj.Transform.UpdateTransform(); });
-        }
+            if (obj == WorldRoot && !obj.IsActive) return;
+            obj.Transform.UpdateTransform();
+        });
 
         // Update ActorScripts
-        foreach (var riObject in RIObjects)
+        TraversalRIObjects(WorldRoot, obj =>
         {
-            TraversalRIObjects(riObject, obj =>
+            if (obj == WorldRoot || !obj.IsActive) return;
+            
+            foreach (var component in obj.Components)
             {
-                foreach (var component in obj.Components)
-                {
-                    if (component is not ActorScript { IsEnabled: true } script) continue;
-                    if (script.IsInitialized)
-                        script.OnUpdate();
-                    else
-                        script.OnInit();
-                }
-            });
-        }
+                if (component is Behaviour behaviour)
+                    behaviour.OnUpdate();
+            }
+        });
     }
 
     public void RenderWorld()
@@ -231,49 +181,32 @@ public class RIWorld : Singleton<RIWorld>
         RenderToView(RIView);
 
         // Render Finished
-        foreach (var riObject in RIObjects)
+        TraversalRIObjects(WorldRoot, obj =>
         {
-            TraversalRIObjects(riObject, obj =>
+            if (obj == WorldRoot || !obj.IsActive) return;
+            
+            foreach (var component in obj.Components)
             {
-                foreach (var component in obj.Components)
-                {
-                    if (component is ActorScript { IsEnabled: true } script)
-                        script.OnRenderFinished();
-                }
-            });
-        }
+                if (component is ActorScript behaviour)
+                    behaviour.OnRenderFinished();
+            }
+        });
     }
 
 
     public void DestroyWorld()
     {
-        OnDestroyRIObjects();
-        RIObjects.Clear();
+        OnDestroyRIObject(WorldRoot);
+        WorldRoot.Children.Clear();
     }
 
     #region Find RIObject and Components
-    
+
     public RIObject? FindRIObject(string name)
     {
-        RIObject? result = null;
-        
-        foreach (var riObject in RIObjects)
+        foreach (var riObject in WorldRoot)
         {
-            result = FindRIObject_Internal(riObject, obj => obj.Name == name);
-            if (result != null) break;
-        }
-
-        return result;
-    }
-
-    private RIObject? FindRIObject_Internal(RIObject current,Func<RIObject,bool> condition)
-    {
-        if (condition(current)) return current;
-
-        foreach (var child in current.Transform.Children)
-        {
-            var riObject = FindRIObject_Internal(child.RIObject, condition);
-            if (riObject != null) return riObject;
+            if (riObject.Name == name) return riObject;
         }
 
         return null;
@@ -281,33 +214,15 @@ public class RIWorld : Singleton<RIWorld>
 
     public T? FindComponent<T>() where T : Component
     {
-        T? component = null;
-
-        foreach (var riObject in RIObjects)
+        foreach (var riObject in WorldRoot)
         {
-            component = FindComponent_Internal<T>(riObject);
-            if (component != null) break;
+            foreach (var component in riObject.Components)
+            {
+                if (component is T t) return t;
+            }
         }
 
-        return component;
-    }
-    
-    private T? FindComponent_Internal<T>(RIObject current) where T: Component
-    {
-        foreach (var component in current.Components)
-        {
-            if (component is T t)
-                return t;
-        }
-        
-        T? result = null;
-        foreach (var child in current.Transform.Children)
-        {
-            result =  FindComponent_Internal<T>(child.RIObject);
-            if (result != null) return result;
-        }
-
-        return result;
+        return null;
     }
 
     #endregion

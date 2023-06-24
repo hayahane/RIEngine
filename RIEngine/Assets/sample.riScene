@@ -1,182 +1,230 @@
-[
-  {
-    "$id": "1",
-    "Name": "camera",
-    "Tag": "Default",
-    "IsActive": true,
-    "Transform": {
-      "$type": "RIEngine.Core.Transform",
-      "Children": [],
-      "Position": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "LocalPosition": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "Rotation": [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "LocalRotation": [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "Scale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "LocalScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "RIObject": {
-        "$ref": "1"
-      }
-    },
-    "Components": [
-      {
-        "$type": "RIEngine.Graphics.Camera",
-        "CastMode": 0,
-        "Near": 0.1,
-        "Far": 1000.0,
-        "FieldOfView": 60.0,
-        "Size": 5.0,
-        "IsEnabled": true,
-        "RIObject": {
-          "$ref": "1"
-        }
-      },
-      {
-        "$type": "RIEngine.BasicComponents.Movement.CharacterMove",
-        "IsEnabled": true,
-        "RIObject": {
-          "$ref": "1"
-        }
-      }
-    ]
+{
+  "Name": "Root",
+  "Tag": "Default",
+  "IsActive": true,
+  "Transform": {
+    "$type": "RIEngine.Core.Transform",
+    "Parent": null,
+    "Position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "LocalPosition": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "Rotation": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "LocalRotation": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "Scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "LocalScale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "RIObject": "520a6244-d4e0-44e5-b3c1-027fced968df",
+    "Guid": "e90efd3c-42ce-4e45-87d6-4ead3ca6e7c4"
   },
-  {
-    "$id": "2",
-    "Name": "monkeyHead",
-    "Tag": "Default",
-    "IsActive": true,
-    "Transform": {
-      "$type": "RIEngine.Core.Transform",
+  "Components": [],
+  "Parent": null,
+  "Children": [
+    {
+      "Name": "camera",
+      "Tag": "Default",
+      "IsActive": true,
+      "Transform": {
+        "$type": "RIEngine.Core.Transform",
+        "Parent": "e90efd3c-42ce-4e45-87d6-4ead3ca6e7c4",
+        "Position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "LocalPosition": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "LocalRotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "Scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "LocalScale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "RIObject": "8af4ae61-cb44-4023-84ff-d817cbec8a25",
+        "Guid": "24eda5db-05cb-49c2-8f4f-12eea00ca70b"
+      },
+      "Components": [
+        {
+          "$type": "RIEngine.Graphics.Camera",
+          "CastMode": 0,
+          "Near": 0.1,
+          "Far": 1000.0,
+          "FieldOfView": 60.0,
+          "Size": 5.0,
+          "IsEnabled": true,
+          "RIObject": "8af4ae61-cb44-4023-84ff-d817cbec8a25",
+          "Guid": "1533ed21-02d3-4c47-956f-8351adf66e70"
+        },
+        {
+          "$type": "RIEngine.BasicComponents.Movement.CharacterMove",
+          "IsEnabled": true,
+          "RIObject": "8af4ae61-cb44-4023-84ff-d817cbec8a25",
+          "Guid": "c4cfb305-19ed-42df-9f19-ba59f7eeb09b"
+        }
+      ],
+      "Parent": null,
+      "Children": [],
+      "Guid": "8af4ae61-cb44-4023-84ff-d817cbec8a25"
+    },
+    {
+      "Name": "monkeyHead",
+      "Tag": "Default",
+      "IsActive": true,
+      "Transform": {
+        "$type": "RIEngine.Core.Transform",
+        "Parent": "e90efd3c-42ce-4e45-87d6-4ead3ca6e7c4",
+        "Position": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "LocalPosition": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "Rotation": [
+          0.0,
+          0.38268346,
+          0.0,
+          0.9238795
+        ],
+        "LocalRotation": [
+          0.0,
+          0.38268346,
+          0.0,
+          0.9238795
+        ],
+        "Scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "LocalScale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "RIObject": "ce21d47a-cc1b-42a5-b77d-90dda183375d",
+        "Guid": "5ee99ad5-79e4-4d7d-be50-6e4b777518f2"
+      },
+      "Components": [
+        {
+          "$type": "RIEngine.Graphics.MeshRenderer",
+          "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\monkeyHead.modelAsset",
+          "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
+          "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
+          "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\OIP.jpg",
+          "IsEnabled": true,
+          "RIObject": "ce21d47a-cc1b-42a5-b77d-90dda183375d",
+          "Guid": "cf4ef8b8-a0ce-4a41-a582-3298afb4a973"
+        }
+      ],
+      "Parent": null,
       "Children": [
         {
-          "$type": "RIEngine.Core.Transform",
+          "Name": "cube",
+          "Tag": "Default",
+          "IsActive": true,
+          "Transform": {
+            "$type": "RIEngine.Core.Transform",
+            "Parent": "5ee99ad5-79e4-4d7d-be50-6e4b777518f2",
+            "Position": [
+              -2.0,
+              0.0,
+              -7.0
+            ],
+            "LocalPosition": [
+              -2.0,
+              0.0,
+              -7.0
+            ],
+            "Rotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "LocalRotation": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "Scale": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "LocalScale": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "RIObject": "37a1729b-794a-48fd-ab13-fa76960e4e38",
+            "Guid": "97791f9d-c5cd-4f46-9b28-a1cd85c25e29"
+          },
+          "Components": [
+            {
+              "$type": "RIEngine.Graphics.MeshRenderer",
+              "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\cube.modelAsset",
+              "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
+              "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
+              "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\Otto.jpeg",
+              "IsEnabled": true,
+              "RIObject": "37a1729b-794a-48fd-ab13-fa76960e4e38",
+              "Guid": "7c9c9ba8-e8e4-4919-b2fe-de45fe6de1ae"
+            }
+          ],
+          "Parent": null,
           "Children": [],
-          "Position": [
-            -2.0,
-            0.0,
-            -7.0
-          ],
-          "LocalPosition": [
-            -2.0,
-            0.0,
-            -7.0
-          ],
-          "Rotation": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-          ],
-          "LocalRotation": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-          ],
-          "Scale": [
-            1.0,
-            1.0,
-            1.0
-          ],
-          "LocalScale": [
-            1.0,
-            1.0,
-            1.0
-          ],
-          "RIObject": {
-            "$id": "3",
-            "Name": "cube",
-            "Tag": "Default",
-            "IsActive": true,
-            "Components": [
-              {
-                "$type": "RIEngine.Graphics.MeshRenderer",
-                "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\cube.modelAsset",
-                "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
-                "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
-                "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\Otto.jpeg",
-                "IsEnabled": true,
-                "RIObject": {
-                  "$ref": "3"
-                }
-              }
-            ]
-          }
+          "Guid": "37a1729b-794a-48fd-ab13-fa76960e4e38"
         }
       ],
-      "Position": [
-        0.0,
-        0.0,
-        -5.0
-      ],
-      "LocalPosition": [
-        0.0,
-        0.0,
-        -5.0
-      ],
-      "Rotation": [
-        0.0,
-        0.38268346,
-        0.0,
-        0.9238795
-      ],
-      "LocalRotation": [
-        0.0,
-        0.38268346,
-        0.0,
-        0.9238795
-      ],
-      "Scale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "LocalScale": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "RIObject": {
-        "$ref": "2"
-      }
-    },
-    "Components": [
-      {
-        "$type": "RIEngine.Graphics.MeshRenderer",
-        "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\monkeyHead.modelAsset",
-        "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
-        "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
-        "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\OIP.jpg",
-        "IsEnabled": true,
-        "RIObject": {
-          "$ref": "2"
-        }
-      }
-    ]
-  }
-]
+      "Guid": "ce21d47a-cc1b-42a5-b77d-90dda183375d"
+    }
+  ],
+  "Guid": "520a6244-d4e0-44e5-b3c1-027fced968df"
+}

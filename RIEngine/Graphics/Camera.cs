@@ -29,6 +29,9 @@ public class Camera : Behaviour
     public Matrix4 ProjectionMatrix;
     [JsonIgnore]
     public Matrix4 ViewMatrix;
+
+    public Camera(RIObject riObject, Guid guid) : base(riObject,guid)
+    { }
     
     public Camera(RIObject riObject) : base(riObject)
     { }

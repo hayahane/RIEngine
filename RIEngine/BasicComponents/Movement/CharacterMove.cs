@@ -9,6 +9,8 @@ public class CharacterMove : ActorScript
     public float MoveSpeed = 1f;
     public KeyboardState Input;
     
+    public CharacterMove(RIObject riObject, Guid guid) : base(riObject,guid)
+    { }
     public CharacterMove(RIObject riObject) : base(riObject)
     {
     }

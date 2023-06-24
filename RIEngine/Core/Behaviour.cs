@@ -28,7 +28,12 @@ public abstract class Behaviour : Component
 
     protected Behaviour(RIObject riObject) : base(riObject)
     {
-        riObject.Components.Add(this);
+        riObject?.Components.Add(this);
+    }
+
+    protected Behaviour(RIObject riObject, Guid guid) : base(riObject, guid)
+    {
+        riObject?.Components.Add(this);
     }
 
     #region Callbacks

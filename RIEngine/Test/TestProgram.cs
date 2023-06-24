@@ -3,7 +3,6 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using RIEngine.BasicComponents.Movement;
 using RIEngine.Core;
 using RIEngine.Graphics;
 using RIEngine.Utility.Serialization;
@@ -17,6 +16,21 @@ public class TestProgram : GameWindow
     public TestProgram(int width, int height, string title) : base(
         GameWindowSettings.Default, new NativeWindowSettings{Size = (width, height),Title = title})
     {
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            NullValueHandling = NullValueHandling.Ignore,
+
+            //Converters
+            Converters =
+            {
+                new OpenTkVector3Serializer(), 
+                new OpenTkQuaternionSerializer(),
+                new ComponentSerializer(), new OpenTkVector2iSerializer(),
+                new RIObjectSerializer()
+            }
+        };
         _riView = new RIView(new Vector2i(width, height));
         RIWorld.Instance.RIView = _riView;
         RIWorld.Instance.LoadScene(@"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets", "sample.riScene");
@@ -25,9 +39,8 @@ public class TestProgram : GameWindow
         camera.RIObject.Name = "camera";
         camera.CastMode = CastMode.Perspective;
         camera.RIObject.Transform.Position = new Vector3(0, 0, 0);
-        var controller = camera.RIObject.AddComponent<CharacterMove>();
+        camera.RIObject.AddComponent<CharacterMove>();
 
-        
         var monkeyHead = RIObject.Spawn().AddComponent<MeshRenderer>();
         monkeyHead.RIObject.Name = "monkeyHead";
         monkeyHead.MeshPath = @"E:\Monologist\CsProjects\RIEngine\RIEngine\Library\ModelAsset\monkeyHead.modelAsset";
@@ -43,24 +56,10 @@ public class TestProgram : GameWindow
         cube.FragPath = @"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\Shaders\BasicUnlit.frag";
         cube.VertPath = @"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\Shaders\BasicUnlit.vert";
         cube.TexturePath = @"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\Textures\Otto.jpeg";
-        cube.RIObject.Transform.Position = new Vector3(-2, 0, -7);*/
+        cube.RIObject.Transform.Position = new Vector3(-2, 0, -7);
 
-        JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-            NullValueHandling = NullValueHandling.Include,
-
-            //Converters
-            Converters =
-            {
-                new OpenTkVector3Converter(), new QuaternionConverter(),
-                new ComponentConverter(), new OpenTkVector2iConverter()
-            }
-        };
-
-        string jsonData = JsonConvert.SerializeObject(RIWorld.Instance.RIObjects);
-        File.WriteAllText(@"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\sample.riScene", jsonData);
+        string jsonData = JsonConvert.SerializeObject(RIWorld.Instance.WorldRoot);
+        File.WriteAllText(@"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets\sample.riScene", jsonData);*/
     }
 
     protected override void OnLoad()

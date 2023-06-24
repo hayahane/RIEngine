@@ -1,3 +1,4 @@
+using System.Collections;
 using Newtonsoft.Json;
 using OpenTK.Mathematics;
 using RIEngine.Mathematics;
@@ -6,13 +7,33 @@ namespace RIEngine.Core;
 
 public class Transform : Component
 {
-    [JsonIgnore] public Transform? Parent;
-    public List<Transform> Children { get; set; } = new List<Transform>();
+    private Transform? _parent;
+
+    public Transform? Parent
+    {
+        get => _parent;
+        set
+        {
+            _parent = value;
+            if (_parent?.Root != null)
+            {
+                Root = _parent.Root;
+
+                Scale = Scale;
+                Rotation = Rotation;
+                Position = Position;
+            }
+        }
+    }
+
     [JsonIgnore] private bool _isChanged;
+
     #region Position
 
     private Vector3 _position = Vector3.Zero;
     private Vector3 _localPosition = Vector3.Zero;
+
+    [JsonIgnore] public Transform Root { get; private set; }
 
     /// <summary>
     /// World position.
@@ -186,9 +207,15 @@ public class Transform : Component
 
     #region Constructor
 
+    public Transform(RIObject riObject, Guid guid) : base(riObject, guid)
+    {
+        LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
+                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
+    }
+
     public Transform(RIObject riObject) : base(riObject)
     {
-        LocalToWorldMatrix =  Matrix4.CreateScale(Scale) *
+        LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
                              (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
     }
 
@@ -199,18 +226,18 @@ public class Transform : Component
     public void UpdateTransform()
     {
         if (!_isChanged) return;
-        
-        LocalScale = LocalScale; 
-        LocalRotation = LocalRotation; 
+
+        LocalScale = LocalScale;
+        LocalRotation = LocalRotation;
         LocalPosition = LocalPosition;
-        
-        LocalToWorldMatrix =  Matrix4.CreateScale(Scale) *
-                              (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
+
+        LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
+                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
         _isChanged = false;
 
-        foreach (var child in Children)
+        foreach (var child in RIObject.Children)
         {
-            child._isChanged = true;
+            child.Transform._isChanged = true;
         }
     }
 

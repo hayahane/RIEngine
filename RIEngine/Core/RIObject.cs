@@ -1,21 +1,46 @@
+using System.Collections;
+using Newtonsoft.Json;
+using RIEngine.Utility.Serialization;
+
 namespace RIEngine.Core;
 
-public class RIObject
+[JsonConverter(typeof(RIObjectSerializer))]
+public class RIObject : SerializableObject, IEnumerable<RIObject>
 {
     public String Name { get; set; }
     public string Tag { get; protected set; } = "Default";
     public bool IsActive { get; set; } = true;
     public Transform Transform { get; }
-
     public List<Component> Components { get; set; } = new List<Component>();
-    
+    [JsonIgnore] private RIObject? _parent;
 
-    public RIObject(string name, RIObject? parent)
+    public RIObject? Parent
+    {
+        get => _parent;
+        set
+        {
+            _parent = value;
+            if (value != null)
+                Transform.Parent = value.Transform;
+        }
+    }
+
+    public List<RIObject> Children { get; set; } = new List<RIObject>();
+
+    [JsonIgnore] public bool IsInWorld => Parent != null;
+
+    public RIObject(Guid guid, Guid transformGuid) : base(guid)
+    {
+        Name = "RIObject";
+        Transform = new Transform(this, transformGuid);
+    }
+
+    public RIObject(string name, RIObject? parent) : base()
     {
         Name = name;
         Transform = (Activator.CreateInstance(typeof(Transform), this) as Transform)!;
-        Transform.Parent = parent?.Transform;
-        parent?.Transform.Children.Add(this.Transform);
+        Parent = parent;
+        Parent?.Children.Add(this);
     }
 
     #region APIs
@@ -28,12 +53,13 @@ public class RIObject
     /// <returns>The Generated RIObject.</returns>
     public static RIObject Spawn()
     {
-        var obj = new RIObject("RIObject",null);
-        RIWorld.Instance.RIObjects.Add(obj);
+        var obj = new RIObject("RIObject", null);
+        RIWorld.Instance.WorldRoot.Children.Add(obj);
+        obj.Parent = RIWorld.Instance.WorldRoot;
         RIWorld.Instance.OnSpawnRIObject(obj);
         return obj;
     }
-    
+
     /// <summary>
     ///  Spawn a riObject with a RIObject instance.
     /// </summary>
@@ -41,9 +67,13 @@ public class RIObject
     public static void Spawn(RIObject riObject)
     {
         if (riObject.Transform.Parent == null)
-            RIWorld.Instance.RIObjects.Add(riObject);
+        {
+            RIWorld.Instance.WorldRoot.Children.Add(riObject);
+            riObject.Parent = RIWorld.Instance.WorldRoot;
+        }
         else
-            riObject.Transform.Parent.Children.Add(riObject.Transform);
+            riObject.Children.Add(riObject);
+
         RIWorld.Instance.OnSpawnRIObject(riObject);
     }
 
@@ -53,7 +83,14 @@ public class RIObject
     /// <param name="riObject">RIObject to be destroyed.</param>
     public static void Destroy(RIObject riObject)
     {
-        RIWorld.Instance.RIObjects.Remove(riObject);
+        foreach (var obj in RIWorld.Instance.WorldRoot)
+        {
+            if (obj == riObject)
+            {
+                riObject.Parent?.Children.Remove(riObject);
+            }
+        }
+
 
         foreach (var component in riObject.Components)
         {
@@ -111,4 +148,19 @@ public class RIObject
     #endregion
 
     #endregion
+
+    public IEnumerator<RIObject> GetEnumerator()
+    {
+        yield return this;
+
+        foreach (var child in Children)
+        {
+            yield return child;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }

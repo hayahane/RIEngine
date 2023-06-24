@@ -93,9 +93,10 @@ public static class ObjFileImporter
             
             Converters =
             {
-                new OpenTkVector3Converter(),
-                new QuaternionConverter(),
-                new ComponentConverter()
+                new OpenTkVector2iSerializer(),
+                new OpenTkVector3Serializer(),
+                new OpenTkQuaternionSerializer(),
+                new ComponentSerializer()
             }
         };
         string jsonData = JsonConvert.SerializeObject(mesh);

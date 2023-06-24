@@ -14,7 +14,7 @@ public class RIView
     {
         Resolution = new Vector2i(1280, 720);
     }
-    
+
     public RIView(Vector2i resolution)
     {
         Resolution = resolution;
@@ -22,13 +22,7 @@ public class RIView
 
     private Camera GetActiveCamera()
     {
-        Camera? tmpCam = null;
-        foreach (var riObject in RIWorld.Instance.RIObjects)
-        {
-            tmpCam = riObject.GetComponent<Camera>();
-            if (tmpCam != null) break;
-        }
-        
+        Camera? tmpCam = RIWorld.Instance.FindComponent<Camera>();
         if (tmpCam == null) ActiveCamera = RIObject.Spawn().AddComponent<Camera>();
         return tmpCam!;
     }
