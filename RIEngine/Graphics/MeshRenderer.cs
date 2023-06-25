@@ -95,6 +95,11 @@ public class MeshRenderer : Behaviour
             Shader.SetVec3("directionalLight.color", new Vector3(riView.DirectionalLight.FinalColor.R,
                 riView.DirectionalLight.FinalColor.G,riView.DirectionalLight.FinalColor.B));
         }
+        else
+        {
+            Shader.SetVec3("directionalLight.direction",Vector3.Zero);
+            Shader.SetVec3("directionalLight.color", Vector3.Zero);
+        }
 
         for (int i = 0; i < RIView.PointLightLimits; i++)
         {
@@ -104,8 +109,6 @@ public class MeshRenderer : Behaviour
                 Shader.SetVec3("pointLights[" + i + "].color", new Vector3(riView.PointLights[i].FinalColor.R,
                     riView.PointLights[i].FinalColor.G, riView.PointLights[i].FinalColor.B));
                 Shader.SetFloat("pointLights[" + i + "].range", riView.PointLights[i].Range);
-                Console.WriteLine(i + " " + riView.PointLights[i].FinalColor);
-                Console.WriteLine(riView.PointLights[i].LightColor);
                 continue;
             }
             Shader.SetVec3("pointLights[" + i + "].position", new Vector3(0, 0, 0));

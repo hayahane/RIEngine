@@ -74,6 +74,7 @@ public class TestProgram : GameWindow
         cube.TexturePath = 
             "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/Otto.jpeg";
         cube.RIObject.Transform.Position = new Vector3(2, 0, -7);
+        c.AddComponent<BounceJump>();
 
         var floor = RIObject.Spawn();
         var fm = floor.AddComponent<MeshRenderer>();
@@ -88,16 +89,6 @@ public class TestProgram : GameWindow
         
         floor.Transform.Scale = new Vector3(10, 0.1f, 10);
         floor.Transform.Position = new Vector3(0, -1, 0);
-    }
-
-    protected override void OnResize(ResizeEventArgs e)
-    {
-    }
-
-    protected override void OnLoad()
-    {
-        base.OnLoad();
-        RIWorld.Instance.Initialize();
         
         var dl = RIObject.Spawn().AddComponent<DirectionalLight>();
         dl.RIObject.Name = "Direction Light";
@@ -105,6 +96,8 @@ public class TestProgram : GameWindow
         dl.LightColor = new Color4(1f, 0.8f, 0.8f, 1);
         dl.LightIntensity = 1f;
         dl.IsEnabled = false;
+
+        dl.RIObject.AddComponent<OpenAndCloseLight>();
 
         var pl = RIObject.Spawn().AddComponent<PointLight>();
         pl.RIObject.Name = "Point Light";
@@ -124,6 +117,16 @@ public class TestProgram : GameWindow
             "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/OIP.jpg";
         plm.IsEnabled = false;
         pl.RIObject.Transform.Scale = new Vector3(0.3f, 0.3f, 0.3f);
+    }
+
+    protected override void OnResize(ResizeEventArgs e)
+    {
+    }
+
+    protected override void OnLoad()
+    {
+        base.OnLoad();
+        RIWorld.Instance.Initialize();
     }
 
     protected override void OnUnload()

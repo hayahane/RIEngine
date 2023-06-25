@@ -44,7 +44,8 @@ public class RIView
     {
         GL.ClearColor(BackgroundColor);
         GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-        
+
+        DirectionalLight = null;
         _pointLights = new PointLight[PointLightLimits];
         _plCount = 0;
         ActiveCamera.Update(this);
