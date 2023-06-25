@@ -51,13 +51,14 @@ void main()
     {
         PointLight pl = pointLights[i];
         vec3 lightDir = normalize(-pl.position + fragPos);
-        float distance = length(-pl.position + fragPos);
+        float distance = length(fragPos - pl.position);
         
-        float s = saturate(pow((1-pow((distance/pl.range * pl.range),4)),2));
-        float attenuation = s / pow(distance/pl.range, 2);
-        float diffuse = max(dot(lightDir, normal), 0.0);
-        vec3 color = vec3(baseColor.r * pl.color.r, baseColor.g * pl.color.g, baseColor.b * pl.color.b);
-        result += attenuation * (diffuse) * vec4(color, baseColor.a);
+        float x = (distance * distance) / (pl.range * pl.range);
+        float s = saturate(1 - x * x);
+        float attenuation = s;
+        float diffuse = max(dot(-lightDir, normal), 0.0);
+        
+        result += (attenuation * diffuse) * vec4(baseColor.rgb * pl.color.rgb, baseColor.a);
     }
     
     fragColor = result;

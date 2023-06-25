@@ -7,7 +7,7 @@ namespace RIEngine.Core;
 /// 
 /// - OnSpawn() called when the RIObject is spawned.
 /// - OnEnable() called when the RIObject is enabled.
-/// - OnStart() called when the RIObject is started. Usually used for initialization.
+/// - OnInit() called when the RIObject is started. Usually used for initialization.
 /// 
 /// - OnUpdate() called every frame.
 /// - OnFixedUpdate() called every fixed frame. (TODO

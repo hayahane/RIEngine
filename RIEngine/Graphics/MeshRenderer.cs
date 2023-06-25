@@ -76,6 +76,7 @@ public class MeshRenderer : Behaviour
 
     public override void OnSpawn()
     {
+        base.OnSpawn();
         Initialize();
         WriteMeshToBuffer();
     }
@@ -108,7 +109,7 @@ public class MeshRenderer : Behaviour
             }
             Shader.SetVec3("pointLights[" + i + "].position", new Vector3(0, 0, 0));
             Shader.SetVec3("pointLights[" + i + "].color", new Vector3(0, 0, 0));
-            Shader.SetFloat("pointLights[" + i + "].range", 0);
+            Shader.SetFloat("pointLights[" + i + "].range", 0.1f);
         }
         
         Shader.Use();

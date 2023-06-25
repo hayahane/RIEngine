@@ -158,12 +158,12 @@ public class RIWorld : Singleton<RIWorld>
         TraversalRIObjects(WorldRoot, obj =>
         {
             BaseLight? light = obj.GetComponent<BaseLight>();
-            if (riView.DirectionalLight == null && light is DirectionalLight dl)
+            if (riView.DirectionalLight == null && light is DirectionalLight{IsEnabled:true} dl)
             {
                 riView.DirectionalLight = dl;
             }
 
-            if (lightIndex < RIView.PointLightLimits && light is PointLight pl)
+            if (lightIndex < RIView.PointLightLimits && light is PointLight{IsEnabled:true} pl)
             {
                 riView.AddPointLight(pl);
                 lightIndex++;
@@ -201,8 +201,17 @@ public class RIWorld : Singleton<RIWorld>
             
             foreach (var component in obj.Components)
             {
-                if (component is Behaviour{IsEnabled:true} behaviour)
-                    behaviour.OnUpdate();
+                if (component is Behaviour { IsSpawnInit: false } be)
+                {
+                    be.OnSpawn();
+                }
+                if (component is Behaviour { IsEnabled: true, IsSpawnInit: true } behaviour)
+                {
+                    if (behaviour.IsInitialized)
+                        behaviour.OnUpdate();
+                    else
+                        behaviour.OnInit();
+                }
             }
         });
     }
@@ -219,7 +228,7 @@ public class RIWorld : Singleton<RIWorld>
             
             foreach (var component in obj.Components)
             {
-                if (component is ActorScript{IsEnabled:true} behaviour)
+                if (component is ActorScript{IsEnabled:true, IsSpawnInit:true} behaviour)
                     behaviour.OnRenderFinished();
             }
         });

@@ -8,7 +8,7 @@ public abstract class Behaviour : Component
 
     public bool IsEnabled
     {
-        get => _isEnabled;
+        get => _isEnabled && IsSpawnInit;
         set
         {
             if (value && !_isEnabled)
@@ -22,6 +22,8 @@ public abstract class Behaviour : Component
     
     [JsonIgnore]
     public bool IsInitialized { get; private set; }
+    [JsonIgnore]
+    public bool IsSpawnInit  {get; private set;}
     
     [JsonIgnore]
     public bool IsSelfActive => (IsEnabled && RIObject.IsActive);
@@ -40,6 +42,7 @@ public abstract class Behaviour : Component
 
     public virtual void OnSpawn()
     {
+        IsSpawnInit = true;
     }
 
     public virtual void OnEnable()

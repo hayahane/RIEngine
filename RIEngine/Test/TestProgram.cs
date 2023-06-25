@@ -41,7 +41,7 @@ public class TestProgram : GameWindow
         _riView = new RIView(new Vector2i(width, height));
         RIWorld.Instance.RIView = _riView;
         Console.WriteLine();
-        RIWorld.Instance.LoadScene("/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/sample.riScene");
+        //RIWorld.Instance.LoadScene("/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/sample.riScene");
         
         
         var camera = RIObject.Spawn().AddComponent<Camera>();
@@ -84,7 +84,7 @@ public class TestProgram : GameWindow
         fm.FragPath =
             "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.frag";
         fm.TexturePath = 
-            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/Otto.jpeg";
+            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/OIP.jpg";
         
         floor.Transform.Scale = new Vector3(10, 0.1f, 10);
         floor.Transform.Position = new Vector3(0, -1, 0);
@@ -104,14 +104,26 @@ public class TestProgram : GameWindow
         dl.RIObject.Tag = "Light";
         dl.LightColor = new Color4(1f, 0.8f, 0.8f, 1);
         dl.LightIntensity = 1f;
+        dl.IsEnabled = false;
 
         var pl = RIObject.Spawn().AddComponent<PointLight>();
         pl.RIObject.Name = "Point Light";
         pl.RIObject.Tag = "Light";
-        pl.LightColor = new Color4(1f, 0f, 1f, 1f);
+        pl.LightColor = new Color4(1f, 1f, 1f, 1f);
         pl.LightIntensity = 5f;
-        pl.Range = 3f;
-        pl.RIObject.Transform.Position = new Vector3(0, 0, 0);
+        pl.Range = 2f;
+        pl.RIObject.Transform.Position = new Vector3(0, 0, -4);
+        var plm = pl.RIObject.AddComponent<MeshRenderer>();
+        plm.MeshPath =
+            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Library/ModelAsset/cube.modelAsset";
+        plm.VertPath =
+            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.vert";
+        plm.FragPath =
+            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.frag";
+        plm.TexturePath = 
+            "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/OIP.jpg";
+        plm.IsEnabled = false;
+        pl.RIObject.Transform.Scale = new Vector3(0.3f, 0.3f, 0.3f);
     }
 
     protected override void OnUnload()
@@ -131,7 +143,6 @@ public class TestProgram : GameWindow
             File.WriteAllText("/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/sample.riScene", json);
             m = 1;
         }
-        
     }
 
     protected override void OnRenderFrame(FrameEventArgs args)
@@ -140,7 +151,7 @@ public class TestProgram : GameWindow
         RIWorld.Instance.RenderWorld();
         SwapBuffers();
     }
-    
+
     static void Main()
     {
         using (TestProgram gameProc = new TestProgram(1280, 720, "RIEngine_RenderTest"))
