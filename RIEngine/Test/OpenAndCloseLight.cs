@@ -6,11 +6,16 @@ namespace RIEngine.Test;
 
 public class OpenAndCloseLight : ActorScript
 {
+    #region Constructors
+
     public OpenAndCloseLight(RIObject riObject, Guid guid) : base(riObject, guid)
     { }
     
     public OpenAndCloseLight(RIObject riObject) : base(riObject)
     { }
+
+
+    #endregion
 
     private DirectionalLight _light;
     public override void OnEnable()
