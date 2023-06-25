@@ -17,6 +17,6 @@ public class BaseLight : Behaviour
     public float LightIntensity { get; set; } = 1f;
 
     [JsonIgnore]
-    public Color4 FinalColor => new Color4(LightColor.A * LightIntensity,
-        LightColor.G * LightIntensity, LightColor.B * LightIntensity,1f);
+    public Color4 FinalColor => new Color4(LightColor.R * LightIntensity,
+        LightColor.G * LightIntensity, LightColor.B * LightIntensity,LightColor.A);
 }

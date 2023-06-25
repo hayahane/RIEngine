@@ -109,8 +109,8 @@ public class TestProgram : GameWindow
         var pl = RIObject.Spawn().AddComponent<PointLight>();
         pl.RIObject.Name = "Point Light";
         pl.RIObject.Tag = "Light";
-        pl.LightColor = new Color4(1f, 1f, 1f, 1f);
-        pl.LightIntensity = 5f;
+        pl.LightColor = new Color4(0f, 1f, 0f, 1f);
+        pl.LightIntensity = 1f;
         pl.Range = 2f;
         pl.RIObject.Transform.Position = new Vector3(0, 0, -4);
         var plm = pl.RIObject.AddComponent<MeshRenderer>();

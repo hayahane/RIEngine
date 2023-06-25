@@ -55,7 +55,7 @@ void main()
         
         float x = (distance * distance) / (pl.range * pl.range);
         float s = saturate(1 - x * x);
-        float attenuation = s;
+        float attenuation = s * s;
         float diffuse = max(dot(-lightDir, normal), 0.0);
         
         result += (attenuation * diffuse) * vec4(baseColor.rgb * pl.color.rgb, baseColor.a);
