@@ -6,7 +6,7 @@ namespace RIEngine.BasicComponents.Movement;
 
 public class CharacterMove : ActorScript
 {
-    public float MoveSpeed = 1f;
+    public float MoveSpeed { get; set; } = 1f;
     public KeyboardState Input;
     
     public CharacterMove(RIObject riObject, Guid guid) : base(riObject,guid)

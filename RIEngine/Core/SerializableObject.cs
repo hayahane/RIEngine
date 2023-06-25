@@ -1,3 +1,5 @@
+using RIEngine.Utility.Serialization;
+
 namespace RIEngine.Core;
 
 public class SerializableObject
@@ -7,6 +9,7 @@ public class SerializableObject
     public SerializableObject()
     {
         Guid = Guid.NewGuid();
+        GuidReferenceHelper.GuidReferenceMap.Add(Guid, this);
     }
 
     public SerializableObject(Guid guid)

@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using RIEngine.Core;
 
 namespace RIEngine.Graphics;
@@ -86,6 +87,30 @@ public class MeshRenderer : Behaviour
         Shader.SetMat4("model", RIObject.Transform.LocalToWorldMatrix);
         Shader.SetMat4("view", riView.ActiveCamera.ViewMatrix);
         Shader.SetMat4("projection", riView.ActiveCamera.ProjectionMatrix);
+
+        if (riView.DirectionalLight != null)
+        {
+            Shader.SetVec3("directionalLight.direction", riView.DirectionalLight.Direction);
+            Shader.SetVec3("directionalLight.color", new Vector3(riView.DirectionalLight.FinalColor.R,
+                riView.DirectionalLight.FinalColor.G,riView.DirectionalLight.FinalColor.B));
+        }
+
+        for (int i = 0; i < RIView.PointLightLimits; i++)
+        {
+            if (i < riView.PlCount)
+            {
+                Shader.SetVec3("pointLights[" + i + "].position", riView.PointLights[i].RIObject.Transform.Position);
+                Shader.SetVec3("pointLights[" + i + "].color", new Vector3(riView.PointLights[i].FinalColor.R,
+                    riView.PointLights[i].FinalColor.G, riView.PointLights[i].FinalColor.B));
+                Shader.SetFloat("pointLights[" + i + "].range", riView.PointLights[i].Range);
+                
+                continue;
+            }
+            Shader.SetVec3("pointLights[" + i + "].position", new Vector3(0, 0, 0));
+            Shader.SetVec3("pointLights[" + i + "].color", new Vector3(0, 0, 0));
+            Shader.SetFloat("pointLights[" + i + "].range", 0);
+        }
+        
         Shader.Use();
         Texture.Use(TextureUnit.Texture0);
 

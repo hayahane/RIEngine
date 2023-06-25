@@ -8,7 +8,7 @@ namespace RIEngine.Core;
 public class RIObject : SerializableObject, IEnumerable<RIObject>
 {
     public String Name { get; set; }
-    public string Tag { get; protected set; } = "Default";
+    public string Tag { get; set; } = "Default";
     public bool IsActive { get; set; } = true;
     public Transform Transform { get; }
     public List<Component> Components { get; set; } = new List<Component>();
@@ -155,7 +155,10 @@ public class RIObject : SerializableObject, IEnumerable<RIObject>
 
         foreach (var child in Children)
         {
-            yield return child;
+            foreach (var node in child)
+            {
+                yield return node;
+            }
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Drawing;
 using RIEngine.Patterns;
 using Newtonsoft.Json;
 using RIEngine.Graphics;
@@ -66,7 +67,6 @@ public class RIWorld : Singleton<RIWorld>
     /// Add scene to current RIWorld.
     /// </summary>
     /// <param name="path">Scene file path.</param>
-    /// <param name="fileName">Scene file name.</param>
     public void AddScene(string path)
     {
         string jsonData = File.ReadAllText(path);
@@ -154,10 +154,25 @@ public class RIWorld : Singleton<RIWorld>
     private void RenderToView(RIView riView)
     {
         riView.PreRender();
-        riView.ActiveCamera.Update(riView);
+        int lightIndex = 0;
+        TraversalRIObjects(WorldRoot, obj =>
+        {
+            BaseLight? light = obj.GetComponent<BaseLight>();
+            if (riView.DirectionalLight == null && light is DirectionalLight dl)
+            {
+                riView.DirectionalLight = dl;
+            }
+
+            if (lightIndex < RIView.PointLightLimits && light is PointLight pl)
+            {
+                riView.AddPointLight(pl);
+                lightIndex++;
+            }
+        });
         
         TraversalRIObjects(WorldRoot, obj =>
         {
+
             MeshRenderer? meshRenderer = obj.GetComponent<MeshRenderer>();
             if (meshRenderer is not { IsEnabled: true }) return;
 
@@ -186,7 +201,7 @@ public class RIWorld : Singleton<RIWorld>
             
             foreach (var component in obj.Components)
             {
-                if (component is Behaviour behaviour)
+                if (component is Behaviour{IsEnabled:true} behaviour)
                     behaviour.OnUpdate();
             }
         });
@@ -204,7 +219,7 @@ public class RIWorld : Singleton<RIWorld>
             
             foreach (var component in obj.Components)
             {
-                if (component is ActorScript behaviour)
+                if (component is ActorScript{IsEnabled:true} behaviour)
                     behaviour.OnRenderFinished();
             }
         });

@@ -27,7 +27,6 @@ public class Transform : Component
     }
 
     [JsonIgnore] private bool _isChanged;
-
     #region Position
 
     private Vector3 _position = Vector3.Zero;
@@ -60,7 +59,7 @@ public class Transform : Component
         get => _localPosition;
         set
         {
-            _isChanged = true;
+            _isChanged= true;
             _localPosition = value;
             _position = Parent?.ReversePoint(value) ?? value;
         }
@@ -209,14 +208,14 @@ public class Transform : Component
 
     public Transform(RIObject riObject, Guid guid) : base(riObject, guid)
     {
-        LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
-                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
+        LocalToWorldMatrix = Matrix4.CreateTranslation(Position)  *
+                             (Matrix4.CreateFromQuaternion(Rotation)* Matrix4.CreateScale(Scale));
     }
 
     public Transform(RIObject riObject) : base(riObject)
     {
-        LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
-                             (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
+        LocalToWorldMatrix = Matrix4.CreateTranslation(Position)  *
+                          (Matrix4.CreateFromQuaternion(Rotation)* Matrix4.CreateScale(Scale));
     }
 
     #endregion
@@ -227,12 +226,11 @@ public class Transform : Component
     {
         if (!_isChanged) return;
 
-        LocalScale = LocalScale;
-        LocalRotation = LocalRotation;
-        LocalPosition = LocalPosition;
-
         LocalToWorldMatrix = Matrix4.CreateScale(Scale) *
                              (Matrix4.CreateFromQuaternion(Rotation) * Matrix4.CreateTranslation(Position));
+        Position = Position;
+        Rotation = Rotation;
+        Scale = Scale;
         _isChanged = false;
 
         foreach (var child in RIObject.Children)

@@ -12,13 +12,22 @@ public class RIObjectSerializer : JsonConverter
         if (value == null) return;
 
         var jo = new JObject();
-        var obj = value as RIObject;
+        var rio = value as RIObject;
 
         foreach (var property in value.GetType().GetProperties())
         {
             if (!property.CanRead ||
                 property.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length != 0) continue;
 
+            if (property.Name == "Parent")
+            {
+                if (rio.Parent != null)
+                    jo.Add(property.Name, JToken.FromObject((GuidReferenceHelper.GuidReferenceMap[rio.Parent.Guid] as SerializableObject).Guid, serializer));
+                else
+                    jo.Add(property.Name, JValue.CreateNull());
+                continue;
+            }
+            
             var propertyValue = property.GetValue(value, null);
             if (propertyValue != null)
                 jo.Add(property.Name, JToken.FromObject(propertyValue, serializer));
@@ -32,7 +41,6 @@ public class RIObjectSerializer : JsonConverter
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue,
         JsonSerializer serializer)
     {
-        object? obj = null;
         var jObject = JObject.Load(reader);
         var guid = new Guid(jObject.GetValue("Guid")!.Value<string>()!);
         var name = jObject.GetValue("Name")!.Value<string>()!;
@@ -51,6 +59,18 @@ public class RIObjectSerializer : JsonConverter
         foreach (var property in objectType.GetProperties())
         {
             if (property.Name == "Name") continue;
+            if (property.Name == "Parent" && property.PropertyType == typeof(RIObject))
+            {
+                var guidToken = jObject.GetValue(property.Name)!;
+                if (guidToken.Type == JTokenType.Null)
+                    riObject.Parent = null;
+                else
+                {
+                    var tmpGuid = new Guid(guidToken.Value<string>()!);
+                    riObject.Parent = GuidReferenceHelper.GuidReferenceMap[tmpGuid] as RIObject;
+                }
+                continue;
+            }
             if (!property.CanWrite ||
                 property.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length != 0) continue;
             var propertyValue = jObject.GetValue(property.Name)!;
