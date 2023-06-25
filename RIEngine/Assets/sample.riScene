@@ -153,10 +153,10 @@
       "Components": [
         {
           "$type": "RIEngine.Graphics.MeshRenderer",
-          "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\monkeyHead.modelAsset",
-          "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
-          "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
-          "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\OIP.jpg",
+          "MeshPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Library/ModelAsset/monkeyHead.modelAsset",
+          "VertPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.vert",
+          "FragPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.frag",
+          "TexturePath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/OIP.jpg",
           "IsEnabled": true,
           "RIObject": "ce21d47a-cc1b-42a5-b77d-90dda183375d",
           "Guid": "cf4ef8b8-a0ce-4a41-a582-3298afb4a973"
@@ -209,10 +209,10 @@
           "Components": [
             {
               "$type": "RIEngine.Graphics.MeshRenderer",
-              "MeshPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Library\\ModelAsset\\cube.modelAsset",
-              "VertPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.vert",
-              "FragPath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Shaders\\BasicUnlit.frag",
-              "TexturePath": "E:\\Monologist\\CsProjects\\RIEngine\\RIEngine\\Assets\\Textures\\Otto.jpeg",
+              "MeshPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Library/ModelAsset/cube.modelAsset",
+              "VertPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.vert",
+              "FragPath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Shaders/BasicUnlit.frag",
+              "TexturePath": "/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/Textures/Otto.jpeg",
               "IsEnabled": true,
               "RIObject": "37a1729b-794a-48fd-ab13-fa76960e4e38",
               "Guid": "7c9c9ba8-e8e4-4919-b2fe-de45fe6de1ae"

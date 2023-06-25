@@ -12,13 +12,29 @@ public class RIWorld : Singleton<RIWorld>
     [JsonIgnore] public GameTime GameTime { get; } = new GameTime();
     public RIObject WorldRoot { get; set; } = new RIObject("Root", null);
 
+    private void HandleObjectReference()
+    {
+        foreach (var riObject in WorldRoot)
+        {
+            for (int i = 0; i < riObject.Components.Count; i++)
+            {
+                var component = riObject.Components[i];
+                if (component is not Behaviour)
+                {
+                    component = GuidReferenceHelper.GuidReferenceMap[component.Guid] as Component;
+                }
+            }
+        }
+    }
+    
+
     /// <summary>
     /// Read .riScene file and load scene.
     /// </summary>
     /// <param name="path">File path.</param>
     /// <param name="fileName">File name.</param>
     /// <exception cref="Exception">Failed to load scene. The file may be damaged.</exception>
-    public void LoadScene(string path, string fileName)
+    public void LoadScene(string path)
     {
         JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
         {
@@ -35,10 +51,11 @@ public class RIWorld : Singleton<RIWorld>
                 new RIObjectSerializer()
             }
         };
-        string jsonData = File.ReadAllText(path + @"\" + fileName);
+        string jsonData = File.ReadAllText(path);
         WorldRoot = JsonConvert.DeserializeObject<RIObject>(jsonData)
                                     ?? throw new Exception("Failed to load scene. The file may be damaged.");
-
+        
+        HandleObjectReference();
         OnSpawnRIObject(WorldRoot);
 
         RIView.UpdateActiveCamera();
@@ -50,9 +67,9 @@ public class RIWorld : Singleton<RIWorld>
     /// </summary>
     /// <param name="path">Scene file path.</param>
     /// <param name="fileName">Scene file name.</param>
-    public void AddScene(string path, string fileName)
+    public void AddScene(string path)
     {
-        string jsonData = File.ReadAllText(path + fileName);
+        string jsonData = File.ReadAllText(path);
         
         RIObject newObjects = JsonConvert.DeserializeObject<RIObject>(jsonData)
                                     ?? throw new Exception("Failed to load scene. The file may be damaged.");

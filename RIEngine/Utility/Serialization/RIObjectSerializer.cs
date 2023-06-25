@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenTK.Mathematics;
 using RIEngine.Core;
 
 namespace RIEngine.Utility.Serialization;
@@ -36,45 +37,29 @@ public class RIObjectSerializer : JsonConverter
         var guid = new Guid(jObject.GetValue("Guid")!.Value<string>()!);
         var name = jObject.GetValue("Name")!.Value<string>()!;
 
-        var transform = jObject.SelectToken("Transform") as JObject;
-        var transGuid = new Guid(transform?.GetValue("Guid")?.Value<string>()!);
+        var jTransform = jObject.SelectToken("Transform") as JObject;
+        var transGuid = new Guid(jTransform?.GetValue("Guid")?.Value<string>()!);
         RIObject riObject = new RIObject(guid, transGuid);
         riObject.Name = name;
-        GuidReferenceHandler.GuidReferenceMap.TryAdd(guid, riObject);
+        GuidReferenceHelper.GuidReferenceMap.TryAdd(guid, riObject);
 
+        riObject.Parent = riObject.Parent;
+        riObject.Transform.Position = jTransform!.GetValue("Position")!.ToObject<Vector3>(serializer);
+        riObject.Transform.Rotation = jTransform!.GetValue("Rotation")!.ToObject<Quaternion>(serializer);
+        riObject.Transform.Scale = jTransform!.GetValue("Scale")!.ToObject<Vector3>(serializer);
 
         foreach (var property in objectType.GetProperties())
         {
+            if (property.Name == "Name") continue;
             if (!property.CanWrite ||
                 property.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length != 0) continue;
-            if (property.Name == "Transform" || property.Name == "Name") continue;
-
-            if (!property.PropertyType.IsSubclassOf(typeof(Component)))
-            {
-                var propertyValue = jObject.GetValue(property.Name)!;
-                if (!propertyValue.HasValues && propertyValue.Type != JTokenType.String) 
-                    propertyValue = null;
-                if (propertyValue != null)
-                    property.SetValue(riObject, propertyValue.ToObject(property.PropertyType, serializer));
-                else
-                    property.SetValue(riObject, null);
-            }
+            var propertyValue = jObject.GetValue(property.Name)!;
+            if (propertyValue.Type == JTokenType.Null)
+                propertyValue = null;
+            if (propertyValue != null)
+                property.SetValue(riObject, propertyValue.ToObject(property.PropertyType, serializer));
             else
-            {
-                var componentGuid = new Guid(jObject.GetValue("Guid")!.Value<string>()!);
-                var component = Activator.CreateInstance(property.PropertyType, this, componentGuid)!;
-                riObject.Components.Add(component as Component);
-                GuidReferenceHandler.GuidReferenceMap.TryAdd(componentGuid, component!);
-
-                foreach (var soProperty in property.PropertyType.GetProperties())
-                {
-                    if (!soProperty.CanWrite ||
-                        soProperty.GetCustomAttributes(typeof(JsonIgnoreAttribute), true).Length != 0) continue;
-
-                    var propertyValue = jObject.GetValue(soProperty.Name);
-                    soProperty.SetValue(component, propertyValue);
-                }
-            }
+                property.SetValue(riObject, null);
         }
 
         return riObject;

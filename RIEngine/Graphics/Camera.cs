@@ -22,6 +22,7 @@ public class Camera : Behaviour
     }
     public float Size { get; set; }= 5f;
     
+    [JsonIgnore]
     private float _fov = MathHelper.PiOver3;
 
     

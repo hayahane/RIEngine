@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Newtonsoft.Json;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Mathematics;
@@ -33,7 +34,8 @@ public class TestProgram : GameWindow
         };
         _riView = new RIView(new Vector2i(width, height));
         RIWorld.Instance.RIView = _riView;
-        RIWorld.Instance.LoadScene(@"E:\Monologist\CsProjects\RIEngine\RIEngine\Assets", "sample.riScene");
+        Console.WriteLine();
+        RIWorld.Instance.LoadScene("/Users/hayahane/RiderProjects/RIEngine/RIEngine/Assets/sample.riScene");
 
         /*var camera = RIObject.Spawn().AddComponent<Camera>();
         camera.RIObject.Name = "camera";

@@ -11,7 +11,6 @@ public class ComponentSerializer : JsonConverter
         if (value != null)
         {
             var jo = new JObject();
-            var obj = value as Component;
 
             var type = value.GetType();
             jo.AddFirst(new JProperty("$type", type.FullName));
@@ -47,7 +46,7 @@ public class ComponentSerializer : JsonConverter
         var guid = new Guid(jObject.GetValue("RIObject")!.Value<string>()!);
         var type = Type.GetType(jObject.GetValue("$type")!.Value<string>()!)!;
 
-        if (GuidReferenceHandler.GuidReferenceMap.TryGetValue(guid, out var riObject))
+        if (GuidReferenceHelper.GuidReferenceMap.TryGetValue(guid, out var riObject))
         {
             var component = Activator.CreateInstance(type, riObject, componentGuid)!;
             foreach (var property in type.GetProperties())
@@ -59,19 +58,27 @@ public class ComponentSerializer : JsonConverter
 
                 if (property.PropertyType.IsSubclassOf(typeof(SerializableObject)))
                 {
-                    var so = new SerializableObject(new Guid(propertyValue.Value<string>()!));
+                    if (!GuidReferenceHelper.GuidReferenceMap.TryGetValue(guid, out var so))
+                    {
+                        so = new SerializableObject(new Guid(propertyValue.Value<string>()!));
+                    }
+
                     property.SetValue(component, so);
+                    GuidReferenceHelper.GuidReferenceMap.TryAdd(componentGuid, so);
                 }
                 else
                 {
-                    if (!propertyValue.HasValues && propertyValue.Type != JTokenType.String) 
+                    if (propertyValue.Type == JTokenType.Null) 
                         propertyValue = null;
                     property.SetValue(component,
                         propertyValue != null ? propertyValue.ToObject(property.PropertyType, serializer) : null);
                 }
-                
             }
 
+            if (!GuidReferenceHelper.GuidReferenceMap.TryAdd(componentGuid, component))
+            {
+                GuidReferenceHelper.GuidReferenceMap[componentGuid] = component;
+            }
             return component;
         }
 

@@ -2,7 +2,7 @@ using RIEngine.Patterns;
 
 namespace RIEngine.Utility.Serialization;
 
-public static class GuidReferenceHandler
+public static class GuidReferenceHelper
 {
     public static Dictionary<Guid, object> GuidReferenceMap { get; } = new Dictionary<Guid, object>();
 
