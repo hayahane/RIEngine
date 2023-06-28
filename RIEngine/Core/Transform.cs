@@ -32,7 +32,7 @@ public class Transform : Component
     private Vector3 _position = Vector3.Zero;
     private Vector3 _localPosition = Vector3.Zero;
 
-    [JsonIgnore] public Transform Root { get; private set; }
+    [JsonIgnore] public Transform? Root { get; private set; }
 
     /// <summary>
     /// World position.

@@ -9,15 +9,17 @@ public class OpenAndCloseLight : ActorScript
     #region Constructors
 
     public OpenAndCloseLight(RIObject riObject, Guid guid) : base(riObject, guid)
-    { }
-    
-    public OpenAndCloseLight(RIObject riObject) : base(riObject)
-    { }
+    {
+    }
 
+    public OpenAndCloseLight(RIObject riObject) : base(riObject)
+    {
+    }
 
     #endregion
 
-    private DirectionalLight _light;
+    private DirectionalLight? _light;
+
     public override void OnEnable()
     {
         base.OnEnable();
@@ -28,12 +30,11 @@ public class OpenAndCloseLight : ActorScript
     {
         base.OnUpdate();
 
-        KeyboardState input = TestProgram.Input;
+        KeyboardState? input = TestProgram.Input;
 
-        if (input.IsKeyPressed(Keys.O))
+        if (input != null && input.IsKeyPressed(Keys.O) && _light != null)
         {
             _light.IsEnabled = !_light.IsEnabled;
         }
-        
     }
 }

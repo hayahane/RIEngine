@@ -9,7 +9,7 @@ public class CharacterMove : ActorScript
 {
     public float MoveSpeed { get; set; } = 1f;
     public float RotateSpeed { get; set; } = 1f;
-    public KeyboardState Input;
+    public KeyboardState? Input;
 
     public CharacterMove(RIObject riObject, Guid guid) : base(riObject,guid)
     { }
@@ -21,6 +21,7 @@ public class CharacterMove : ActorScript
     {
         base.OnUpdate();
         Input = TestProgram.Input;
+        if (Input == null) return;
         if (Input.IsKeyDown(Keys.W))
         {
             RIObject.Transform.Position -=

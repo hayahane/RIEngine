@@ -79,7 +79,10 @@ public class RIWorld : Singleton<RIWorld>
 
         RIView.UpdateActiveCamera();
     }
-
+    
+    /// <summary>
+    /// Initialize RIWorld.
+    /// </summary>
     public void Initialize()
     {
         RIView.Initialize();
@@ -150,7 +153,11 @@ public class RIWorld : Singleton<RIWorld>
             TraversalRIObjects(child, action);
         }
     }
-
+    
+    /// <summary>
+    /// Render current scene to target RIView.
+    /// </summary>
+    /// <param name="riView">Target RIView.</param>
     private void RenderToView(RIView riView)
     {
         riView.PreRender();
@@ -215,7 +222,10 @@ public class RIWorld : Singleton<RIWorld>
             }
         });
     }
-
+    
+    /// <summary>
+    /// Render update.
+    /// </summary>
     public void RenderWorld()
     {
         // Render
@@ -234,7 +244,9 @@ public class RIWorld : Singleton<RIWorld>
         });
     }
 
-
+    /// <summary>
+    /// End program and dispose RIWorld.
+    /// </summary>
     public void DestroyWorld()
     {
         OnDestroyRIObject(WorldRoot);
@@ -242,7 +254,12 @@ public class RIWorld : Singleton<RIWorld>
     }
 
     #region Find RIObject and Components
-
+    
+    /// <summary>
+    /// Find a RIObject by name.
+    /// </summary>
+    /// <param name="name">Name to filter a RIObject.</param>
+    /// <returns>The target object. Null if not found.</returns>
     public RIObject? FindRIObject(string name)
     {
         foreach (var riObject in WorldRoot)
@@ -252,7 +269,13 @@ public class RIWorld : Singleton<RIWorld>
 
         return null;
     }
-
+    
+    /// <summary>
+    /// Find a component by type.
+    /// A component should be inherited from Component.
+    /// </summary>
+    /// <typeparam name="T">Type of the component.</typeparam>
+    /// <returns>Target component. Null if not found.</returns>
     public T? FindComponent<T>() where T : Component
     {
         foreach (var riObject in WorldRoot)

@@ -20,13 +20,14 @@ public class MeshRenderer : Behaviour
     private int _vertexBufferObject;
     private int _vertexArrayObject;
     private int _elementBufferObject;
-    
+
     public MeshRenderer(RIObject riObject, Guid guid) : base(riObject, guid)
     {
         Mesh = null!;
         Shader = null!;
         Texture = null!;
     }
+
     public MeshRenderer(RIObject riObject) : base(riObject)
     {
         Mesh = null!;
@@ -36,9 +37,13 @@ public class MeshRenderer : Behaviour
 
     public void Initialize()
     {
-        if (MeshPath != null) Mesh = Mesh.LoadFromFile(MeshPath);
-        if (VertPath != null && FragPath != null) Shader = new Shader(VertPath, FragPath);
-        if (TexturePath != null) Texture = Texture.LoadFromFile(TexturePath);
+        if (MeshPath != null)
+            Mesh = Mesh.LoadFromFile(AppDomain.CurrentDomain.BaseDirectory + MeshPath);
+        if (VertPath != null && FragPath != null)
+            Shader = new Shader(AppDomain.CurrentDomain.BaseDirectory + VertPath,
+                AppDomain.CurrentDomain.BaseDirectory + FragPath);
+        if (TexturePath != null)
+            Texture = Texture.LoadFromFile(AppDomain.CurrentDomain.BaseDirectory + TexturePath);
     }
 
 
@@ -93,11 +98,11 @@ public class MeshRenderer : Behaviour
         {
             Shader.SetVec3("directionalLight.direction", riView.DirectionalLight.Direction);
             Shader.SetVec3("directionalLight.color", new Vector3(riView.DirectionalLight.FinalColor.R,
-                riView.DirectionalLight.FinalColor.G,riView.DirectionalLight.FinalColor.B));
+                riView.DirectionalLight.FinalColor.G, riView.DirectionalLight.FinalColor.B));
         }
         else
         {
-            Shader.SetVec3("directionalLight.direction",Vector3.Zero);
+            Shader.SetVec3("directionalLight.direction", Vector3.Zero);
             Shader.SetVec3("directionalLight.color", Vector3.Zero);
         }
 
@@ -111,22 +116,22 @@ public class MeshRenderer : Behaviour
                 Shader.SetFloat("pointLights[" + i + "].range", riView.PointLights[i].Range);
                 continue;
             }
+
             Shader.SetVec3("pointLights[" + i + "].position", new Vector3(0, 0, 0));
             Shader.SetVec3("pointLights[" + i + "].color", new Vector3(0, 0, 0));
             Shader.SetFloat("pointLights[" + i + "].range", 0.1f);
         }
-        
+
         Shader.Use();
         Texture.Use(TextureUnit.Texture0);
 
         GL.DrawElements(PrimitiveType.Triangles, Mesh.Indices.Length, DrawElementsType.UnsignedInt, 0);
     }
-    
+
     public override void OnDestroy()
     {
         Shader.Dispose();
     }
 
     #endregion
-
 }

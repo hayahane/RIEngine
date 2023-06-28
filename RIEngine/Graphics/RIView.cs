@@ -39,7 +39,13 @@ public class RIView
         var tmpActiveCamera = RIWorld.Instance.FindComponent<Camera>();
         if (tmpActiveCamera != null) ActiveCamera = tmpActiveCamera;
     }
-
+    
+    /// <summary>
+    /// Handles pre-rendering functions：
+    /// - Clear color buffer and depth buffer.
+    /// - Update active camera.
+    /// - Clear lights.
+    /// </summary>
     public void PreRender()
     {
         GL.ClearColor(BackgroundColor);
@@ -59,6 +65,11 @@ public class RIView
         ActiveCamera = GetActiveCamera();
     }
     
+    /// <summary>
+    /// Try add a point light to the view.
+    /// </summary>
+    /// <param name="pointLight">Target point light.</param>
+    /// <returns>Whether point light is successfully added.</returns>
     public bool AddPointLight(PointLight pointLight)
     {
         if (_plCount >= PointLightLimits) return false;

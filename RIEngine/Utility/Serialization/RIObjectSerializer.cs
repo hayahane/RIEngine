@@ -21,8 +21,8 @@ public class RIObjectSerializer : JsonConverter
 
             if (property.Name == "Parent")
             {
-                if (rio.Parent != null)
-                    jo.Add(property.Name, JToken.FromObject((GuidReferenceHelper.GuidReferenceMap[rio.Parent.Guid] as SerializableObject).Guid, serializer));
+                if (rio?.Parent != null)
+                    jo.Add(property.Name, JToken.FromObject((GuidReferenceHelper.GuidReferenceMap[rio.Parent.Guid] as SerializableObject)!.Guid, serializer));
                 else
                     jo.Add(property.Name, JValue.CreateNull());
                 continue;

@@ -14,10 +14,9 @@ public class BounceJump : ActorScript
     
     public float LifeUpDistance { get; set; } = 1f;
     public float MoveSpeed { get; set; } = 2f;
-    public RIObject Player { get; set; }
-    
+
     private Vector3 _targetPosition;
-    private int dir = 1;
+    private int _dir = 1;
 
     public override void OnEnable()
     {
@@ -32,8 +31,8 @@ public class BounceJump : ActorScript
 
         if (Vector3.Distance(RIObject.Transform.Position, _targetPosition) < 0.01f)
         {
-            _targetPosition -= Vector3.UnitY * LifeUpDistance * dir;
-            dir = -dir;
+            _targetPosition -= Vector3.UnitY * LifeUpDistance * _dir;
+            _dir = -_dir;
         }
     }
 }
