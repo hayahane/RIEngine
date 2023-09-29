@@ -15,6 +15,10 @@ The engine architecture is inspired by Unity, but it's not a clone of Unity. As 
 in C#, this project doesn't need to handle problems like sharing objects between C# and C++,
 which makes it easier and makes the architecture more clear.
 
+<div align="center">
+<img alt="EngineArch.png"  src="EngineArch.png" width="700"/>
+</div>
+
 ## Features
 - Cross-platform: Windows, Linux, MacOS
 - Basic 3D rendering
