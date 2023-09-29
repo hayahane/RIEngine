@@ -16,7 +16,7 @@ in C#, this project doesn't need to handle problems like sharing objects between
 which makes it easier and makes the architecture more clear.
 
 <div align="center">
-<img src="EngineArchi.png" width="700"/>
+<img src="Doc/EngineArchi.png" width="700"/>
 </div>
 
 ## Features
